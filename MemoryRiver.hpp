@@ -18,6 +18,7 @@ private:
     int sizeofT = sizeof(T);
     int rubbish_head=0;//rubbish_head是一个伪装成int的指针类型
 public:
+    friend class LinkList;
     MemoryRiver() = default;
 
     MemoryRiver(const string& file_name) : file_name(file_name) {}
@@ -35,7 +36,14 @@ public:
     {
         initialise(FN);
     }
-
+    void open()
+    {
+        file.open(file_name, std::ios::in|std::ios::binary);
+    }
+    void close()
+    {
+        file.close();
+    }
     //读出第n个int的值赋给tmp，1_base
     void get_info(int &tmp, int n) 
     {
@@ -64,7 +72,6 @@ public:
         /* your code here */
         get_info(rubbish_head,0);
         file.open(file_name, std::ios::out|std::ios::in|std::ios::binary);
-        //rubbish_head=0;//请在补充空间回收后扔掉这一行
         int target,index;
         if(rubbish_head)
         {
