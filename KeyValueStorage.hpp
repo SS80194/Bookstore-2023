@@ -51,7 +51,6 @@ template<typename TTA>KaData<TTA>::KaData(StringC ori_s,TTA ori_value)
 }
 template<typename TTA>bool operator<(KaData<TTA> a,KaData<TTA> b)
 {
-    if(a.hash_id!=b.hash_id) return a.hash_id<b.hash_id;
     if(!(a.s==b.s)) return a.s<b.s;
     return a.value<b.value;
 }
@@ -85,14 +84,10 @@ template<typename TTA>bool equal(KaData<TTA> a,KaData<TTA> b)
 }
 template<typename TTA>bool operator<(KaData<TTA> a,StringC b)
 {
-    ull b_hash_id=b.toHash();
-    if(a.hash_id!=b_hash_id) return a.hash_id<b_hash_id;
     return a.s<b;
 }
 template<typename TTA>bool operator<(StringC a,KaData<TTA> b)
 {
-    ull a_hash_id=a.toHash();
-    if(a_hash_id!=b.hash_id) return a_hash_id<b.hash_id;
     return a<b.s;
 }
 
