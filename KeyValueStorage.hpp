@@ -162,7 +162,7 @@ template<typename TTA>class KVS
         if(!begin_pos()) initialize();
         else syncBasisFile();
     }
-    KVS(std::string ori_basis_name,std::string ori_detailed_name)
+    KVS(std::string ori_detailed_name)
     {
         
         name_file_detailed=ori_detailed_name;
