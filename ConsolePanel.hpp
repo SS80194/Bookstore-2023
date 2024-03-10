@@ -5,6 +5,7 @@
 #include<vector>
 #include<iostream>
 #include<sstream>
+#include"StringC.hpp"
 
 class ConsolePanel
 {
@@ -26,6 +27,7 @@ class ConsolePanel
             std::cout<<x<<std::endl;
     }
     int size(){return s.size();}
+    bool safetyCheck(){for(std::string &x:s) if(x.size()>StringC::max_length) return false;return true;}
     void invalidOperation(){printf("Invalid\n");fflush(stdout);return ;}
     std::string operator[](int k){if(k>=size()) return 0;return s[k];}
     std::string type(){return (size()?s[0]:"");}
