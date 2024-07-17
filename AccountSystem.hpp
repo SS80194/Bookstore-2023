@@ -18,6 +18,8 @@ class AccountData
         user_id=ori_id;passwd=ori_passwd;privilege=ori_privilege;user_name=ori_name;
     }
 };
+bool operator<(AccountData x,AccountData y){return x.user_id<y.user_id;}
+bool operator==(AccountData x,AccountData y){return x.user_id==y.user_id;}
 class AccountSystem
 {
     private:

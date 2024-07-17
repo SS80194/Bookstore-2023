@@ -5,4 +5,4 @@ cmake_minimum_required (VERSION 3.5)
 project (Demo1)
 
 # 指定生成目标
-add_executable(code main.cpp Home.cpp)
+add_executable(code main.cpp Home.cpp StringC.cpp)

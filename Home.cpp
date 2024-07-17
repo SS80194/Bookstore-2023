@@ -19,14 +19,14 @@ std::map<std::string,void (AccountSystem::*)()> map_A;
 void InitHome()
 {
     //map_A
-    map_A["quit"]=AccountSystem::quit;
-    map_A["exit"]=AccountSystem::quit;
-    map_A["logout"]=AccountSystem::logout;
-    map_A["su"]=AccountSystem::su;
-    map_A["register"]=AccountSystem::signup;
-    map_A["passwd"]=AccountSystem::changePasswd;
-    map_A["delete"]=AccountSystem::deleteAccount;
-    map_A["useradd"]=AccountSystem::signupPro;
+    map_A["quit"]=&AccountSystem::quit;
+    map_A["exit"]=&AccountSystem::quit;
+    map_A["logout"]=&AccountSystem::logout;
+    map_A["su"]=&AccountSystem::su;
+    map_A["register"]=&AccountSystem::signup;
+    map_A["passwd"]=&AccountSystem::changePasswd;
+    map_A["delete"]=&AccountSystem::deleteAccount;
+    map_A["useradd"]=&AccountSystem::signupPro;
     //map_B
 }
 
