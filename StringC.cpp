@@ -3,8 +3,10 @@
 const int StringC::max_length=64;
 StringC::StringC(char *tar_c)
 {
+    int len=0;
     for(int i=0;i<=max_length&&tar_c[i]!=0;i++)
-        s[i]=tar_c[i];
+        len=i,s[i]=tar_c[i];
+    s[len+1]=0;
 }
 StringC::StringC(std::string ori_s)
 {
@@ -44,11 +46,13 @@ int StringC::strlen()
         if(!s[i]) return i;
     return max_length;
 }
-bool StringC::validSetA()
+bool StringC::validSetA()//Only contains numbers,alphabets,and underlines
 {
+    printf("%s\n",s);
     for(int i=0;i<=max_length;i++)
     {
         if(s[i]==0) break;
+        printf("%d ",s[i]);
         bool flg=false;
         if(isNumber(s[i])||isLetter(s[i])||s[i]=='_')
             flg=true;
