@@ -29,7 +29,13 @@ class ConsolePanel
     }
     int size(){return s.size();}
     bool safetyCheck(){for(std::string &x:s) if(x.size()>StringC::max_length) return false;return true;}
-    void invalidOperation(){printf("Invalid\n");fflush(stdout);return ;}
+    void invalidOperation(int typ=0)
+    {
+        //if(typ) printf("Invalid Error code=%d\n",typ);else printf("Invalid\n");
+        printf("Invalid\n");
+        //std::cout<<s_ori<<std::endl;
+        fflush(stdout);return ;
+    }
     std::string operator[](int k){if(k>=size()) return "";return s[k];}
     std::string type(){return (size()?s[0]:"");}
 };

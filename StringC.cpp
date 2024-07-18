@@ -1,7 +1,7 @@
 #include"StringC.hpp"
 
 const int StringC::max_length=64;
-StringC::StringC(char *tar_c)
+StringC::StringC(const char *tar_c)
 {
     int len=0;
     for(int i=0;i<=max_length&&tar_c[i]!=0;i++)
@@ -48,15 +48,17 @@ int StringC::strlen()
 }
 bool StringC::validSetA()//Only contains numbers,alphabets,and underlines
 {
-    printf("%s\n",s);
     for(int i=0;i<=max_length;i++)
     {
         if(s[i]==0) break;
-        printf("%d ",s[i]);
         bool flg=false;
         if(isNumber(s[i])||isLetter(s[i])||s[i]=='_')
             flg=true;
         if(!flg) return false;
     }
     return true;
+}
+std::string StringC::toStr()
+{
+    return (std::string)s;
 }

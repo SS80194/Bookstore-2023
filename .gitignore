@@ -4,3 +4,5 @@
 *.mr
 *.md
 *.zip
+*.in
+*.ans

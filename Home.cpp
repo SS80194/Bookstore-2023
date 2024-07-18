@@ -28,6 +28,11 @@ void InitHome()
     map_A["delete"]=&AccountSystem::deleteAccount;
     map_A["useradd"]=&AccountSystem::signupPro;
     //map_B
+    //----------Waiting For Implement
+    //map_H
+    //----------Waiting For Implement
+
+    A.initAccount();
 }
 
 void ServeHome()
@@ -35,11 +40,13 @@ void ServeHome()
     while(true)
     {
         H.get();
+        if(H.s_ori=="") exit(0);
+        //std::cout<<"T:"<<H.s_ori<<std::endl;
         if(!H.size()) H.invalidOperation();
         else if(!H.safetyCheck()) H.invalidOperation();
         else if(map_A.find(H.type())!=map_A.end())
             (A.*map_A[H.type()])();
-        else H.invalidOperation();
+        else H.invalidOperation(588);
         //Wait to insert B&L
     }
 }

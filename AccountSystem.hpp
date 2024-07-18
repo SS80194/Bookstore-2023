@@ -29,10 +29,11 @@ class AccountSystem
     bool validPrivilege(StringC);
     int convertPrivilege(StringC);
     std::stack<AccountData>s;
-    std::map<StringC,int>mp;
+    std::map<StringC,int>mp;//mp用来统计这个账户登陆的此书
     KVS<AccountData>Account_map{"Account.mr"};
     public:
     bool privilegeEnable(int);
+    void initAccount();
     void quit();
     void logout();
     void su();
@@ -68,13 +69,23 @@ int AccountSystem::convertPrivilege(StringC s)
 bool AccountSystem::privilegeEnable(int x)
 {
     if(!x) return true;
-    if(s.empty()) return false;
+    if(s.empty()) return 0>=x;
     return s.top().privilege>=x;
+}
+void AccountSystem::initAccount()
+{
+    //create an account with id=root & passwd=sjtu
+    if(Account_map.exist("root")) return ;
+    StringC userID_input="root",pwd_input="sjtu",pri_input="7",name_input="root";
+    if(!validID(userID_input)||!validPasswd(pwd_input)||!validUsername(name_input)) {H.invalidOperation();return ;};
+    if(!validPrivilege(pri_input)){H.invalidOperation();return ;}
+    AccountData new_ac(userID_input,pwd_input,convertPrivilege(pri_input),name_input);
+    Account_map.insert(KaData<AccountData>(userID_input,new_ac));
+
 }
 void AccountSystem::quit()
 {
-    if(!privilegeEnable(1)) {H.invalidOperation();return ;};
-    if(H.size()>1) {H.invalidOperation();return ;}
+    if(H.size()>1) {H.invalidOperation(502);return ;}
     else exit(0);
 }
 void AccountSystem::su()
@@ -86,6 +97,7 @@ void AccountSystem::su()
     if(!validID(userID_input)||!Account_map.exist(userID_input)) {H.invalidOperation();return ;}; 
     std::vector<AccountData>A;Account_map.find(A,userID_input);
     AccountData target_user=A[0];
+    //std::cout<<"A.size="<<A.size()<<std::endl;
     if(H.size()==2) 
     {
         if(cur_privilege<=target_user.privilege) {H.invalidOperation();return ;}
@@ -95,12 +107,14 @@ void AccountSystem::su()
         pwd_input=H[2];
         if(!validPasswd(pwd_input)||pwd_input!=target_user.passwd) {H.invalidOperation();return ;}
     }
+    //std::cout<<"S:"<<userID_input.toStr()<<" + "<<target_user.user_id.toStr()<<" "<<target_user.privilege<<" "<<mp[userID_input]<<std::endl;
     mp[userID_input]++;s.push(target_user);
 }
 void AccountSystem::logout()
 {
     if(!privilegeEnable(1)) {H.invalidOperation();return ;}
     if(H.size()>1) {H.invalidOperation();return ;}
+    //std::cout<<"L:"<<s.top().user_id.toStr()<<" "<<mp[s.top().user_id]<<std::endl;
     if(s.empty()) {H.invalidOperation();return ;}
     else mp[s.top().user_id]--,s.pop();
 }
@@ -140,7 +154,7 @@ void AccountSystem::changePasswd()
         }
     }
     else {H.invalidOperation();return ;}
-    AccountData new_data;new_data.passwd=newpwd_input;
+    AccountData new_data=old_data;new_data.passwd=newpwd_input;
     Account_map.erase(KaData(userID_input,old_data));
     Account_map.insert(KaData(userID_input,new_data));
 }
@@ -149,21 +163,23 @@ void AccountSystem::signupPro()
     if(!privilegeEnable(3)) {H.invalidOperation();return ;}
     if(H.size()!=5) {H.invalidOperation();return ;}
     StringC userID_input=H[1],pwd_input=H[2],pri_input=H[3],name_input=H[4];
-    if(!validID(userID_input)||!validPasswd(pwd_input)||!validUsername(name_input)) {H.invalidOperation();return ;};
-    if(!validPrivilege(pri_input)){H.invalidOperation();return ;}
-    if(Account_map.exist(userID_input)) {H.invalidOperation();return ;};
-    if(!privilegeEnable(convertPrivilege(pri_input))) {H.invalidOperation();return ;};
+    if(!validID(userID_input)||!validPasswd(pwd_input)||!validUsername(name_input)) {H.invalidOperation(1);return ;};
+    if(!validPrivilege(pri_input)){H.invalidOperation(2);return ;}
+    if(Account_map.exist(userID_input)) {H.invalidOperation(3);return ;};
+    if(!privilegeEnable(convertPrivilege(pri_input)+1)) {H.invalidOperation(4);return ;};
     AccountData new_ac(userID_input,pwd_input,convertPrivilege(pri_input),name_input);
     Account_map.insert(KaData<AccountData>(userID_input,new_ac));
 }
 void AccountSystem::deleteAccount()
 {
-    if(!privilegeEnable(7)) {H.invalidOperation();return ;}
-    if(H.size()!=2) {H.invalidOperation();return ;}
+    if(!privilegeEnable(7)) {H.invalidOperation(191);return ;}
+    if(H.size()!=2) {H.invalidOperation(192);return ;}
     StringC userID_input=H[1];
-    if(!validID(userID_input)||!Account_map.exist(userID_input)) {H.invalidOperation();return ;};
-    if(mp[userID_input]>0) {H.invalidOperation();return ;}
+    //std::cout<<"D:"<<H[1]<<" + "<<userID_input.toStr()<<" "<<mp[userID_input]<<std::endl;
+    if(!validID(userID_input)||!Account_map.exist(userID_input)) {H.invalidOperation(193);return ;};
+    if(mp[userID_input]>0) {H.invalidOperation(mp[userID_input]);return ;}
     Account_map.erase(userID_input);
     
 }
+
 #endif

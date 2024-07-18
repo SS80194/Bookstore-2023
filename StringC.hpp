@@ -14,9 +14,10 @@ class StringC
     public:
     const static int max_length;
     StringC() {s[0]=0;};
-    StringC(char *);
+    StringC(const char *);
     StringC(std::string);
     ull toHash();
+    std::string toStr();
     char& operator[](int k){return (k<max_length?s[k]:s[max_length]);}
     int strlen();
     bool validSetA();
