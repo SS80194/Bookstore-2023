@@ -25,9 +25,9 @@ class LinkListConfiguration
     const static std::string default_name_file_detailed;
 
 };
-const int LinkListConfiguration::B=540,LinkListConfiguration::P=2*B,LinkListConfiguration::M=3540;
-const std::string LinkListConfiguration::default_name_file_basis="KeyValueStorage1.mr";
-const std::string LinkListConfiguration::default_name_file_detailed="KeyValueStorage2.mr";
+inline const int LinkListConfiguration::B=540,LinkListConfiguration::P=2*B,LinkListConfiguration::M=3540;
+inline const std::string LinkListConfiguration::default_name_file_basis="KeyValueStorage1.mr";
+inline const std::string LinkListConfiguration::default_name_file_detailed="KeyValueStorage2.mr";
 
 template<typename TTA> class KaData
 {

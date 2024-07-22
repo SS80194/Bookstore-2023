@@ -24,6 +24,7 @@ class StringC
     friend bool operator<(StringC,StringC);
     friend bool operator==(StringC,StringC);
     friend bool operator!=(StringC a,StringC b){return !(a==b);}
+    //friend int parseInt(const StringC&);
 };
 
 #endif

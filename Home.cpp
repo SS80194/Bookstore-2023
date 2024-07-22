@@ -6,14 +6,15 @@
 #include<map>
 #include"ConsolePanel.hpp"
 #include"AccountSystem.hpp"
+#include"BookSystem.hpp"
 
 ConsolePanel H;
 AccountSystem A;
-//BookSystem B;
+BookSystem B;
 //LogSystem L;
 
 std::map<std::string,void (AccountSystem::*)()> map_A;
-//std::map<std::string,void (BookSystem::*)()> map_B;
+std::map<std::string,void (BookSystem::*)()> map_B;
 //std::map<std::string,void (LogSystem::*)()> map_L;
 
 void InitHome()
@@ -28,7 +29,11 @@ void InitHome()
     map_A["delete"]=&AccountSystem::deleteAccount;
     map_A["useradd"]=&AccountSystem::signupPro;
     //map_B
-    //----------Waiting For Implement
+    map_B["show"]=&BookSystem::findBook;
+    map_B["buy"]=&BookSystem::buyBook;
+    map_B["select"]=&BookSystem::selectBook;
+    map_B["modify"]=&BookSystem::modifyBook;
+    map_B["import"]=&BookSystem::importBook;
     //map_H
     //----------Waiting For Implement
 

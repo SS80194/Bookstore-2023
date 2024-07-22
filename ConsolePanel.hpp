@@ -7,6 +7,16 @@
 #include<sstream>
 #include"StringC.hpp"
 
+class tagInfo
+{
+    public:
+    int type;
+    std::string word;
+    public:
+    tagInfo()=default;
+    tagInfo(int res_type):type(res_type){};
+};
+
 class ConsolePanel
 {
     public:
@@ -38,6 +48,41 @@ class ConsolePanel
     }
     std::string operator[](int k){if(k>=size()) return "";return s[k];}
     std::string type(){return (size()?s[0]:"");}
+    
+    tagInfo parseTag(const std::string &res)
+    {
+        //固定的格式是-ISBN=""或什么的
+        if(!res.size()) return tagInfo(-1);
+        int i=0,len=res.size();
+        tagInfo ret_value;
+        std::string type1,infos;
+        for(i=1;i<len;i++)
+        {
+            if(res[i]=='=')
+                {++i;break;}
+            else type1+=res[i];
+        }
+        if(type1=="ISBN") ret_value.type=0;
+        else if(type1=="name") ret_value.type=1;
+        else if(type1=="author") ret_value.type=2;
+        else if(type1=="keyword") ret_value.type=3;
+        else if(type1=="price") ret_value.type==4;
+        else return tagInfo(-1);
+        if(1<=ret_value.type&&ret_value.type<=3)
+        {
+            if(i==len-1||res[i]!='"'||res[len-1]!='"')
+                return tagInfo(-1);
+            i++;
+        }
+        for(;i<len;i++)
+        {
+            if(res[i]=='"'&&res[i]!=len-1) return tagInfo(-1);
+            else if(res[i]!='"') infos+=res[i];
+        }
+        if(infos.size()>StringC::max_length) return tagInfo(-1);
+        ret_value.word=infos;
+        return ret_value;
+    }
 };
 
 #endif

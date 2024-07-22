@@ -1,5 +1,6 @@
 #include"StringC.hpp"
 
+//inside Class StringC
 const int StringC::max_length=64;
 StringC::StringC(const char *tar_c)
 {
@@ -61,4 +62,24 @@ bool StringC::validSetA()//Only contains numbers,alphabets,and underlines
 std::string StringC::toStr()
 {
     return (std::string)s;
+}
+
+//Outside Class StringC
+
+int parseInt(const std::string &res)
+{
+    long long tot=0;
+    for(int i=0;i<res.size();i++)
+    {
+        if(res[i]==0) break;
+        if(res[i]<'0'||res[i]>'9') return -1;
+        tot=tot*10+(res[i]-'0');
+        if(tot>2147483647ll) return -1;
+    }
+    return tot;
+}
+
+double parseFloat(const std::string &res)
+{
+    double tot=0;
 }
