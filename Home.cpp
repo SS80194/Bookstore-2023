@@ -16,6 +16,16 @@ BookSystem B;
 std::map<std::string,void (AccountSystem::*)()> map_A;
 std::map<std::string,void (BookSystem::*)()> map_B;
 //std::map<std::string,void (LogSystem::*)()> map_L;
+void recover()
+{
+    //printf("Renoot");
+    system("pwd");
+    system("rm Account.mr");
+    system("rm author_order.mr");
+    system("rm ISBN_order.mr");
+    system("rm name_order.mr");
+    system("rm kwd_order.mr");
+}
 
 void InitHome()
 {
@@ -45,12 +55,14 @@ void ServeHome()
     while(true)
     {
         H.get();
-        if(H.s_ori=="") exit(0);
-        std::cout<<"T:"<<H.s_ori<<std::endl;
+        if(H.s_ori=="") {exit(0);recover();}
+        //std::cout<<"T:"<<H.s_ori<<std::endl;
         if(!H.size()) H.invalidOperation();
         else if(!H.safetyCheck()) H.invalidOperation();
         else if(map_A.find(H.type())!=map_A.end())
             (A.*map_A[H.type()])();
+        else if(map_B.find(H.type())!=map_B.end())
+            (B.*map_B[H.type()])();
         else H.invalidOperation(588);
         //Wait to insert B&L
     }

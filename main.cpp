@@ -4,10 +4,7 @@
 extern void InitHome();
 extern void ServeHome();
 
-void recover()
-{
-    system("rm Account.mr");
-}
+
 
 int main()
 {
@@ -17,5 +14,5 @@ int main()
     InitHome();
     ServeHome();
     printf("wds");
-    recover();
+    //recover();
 }

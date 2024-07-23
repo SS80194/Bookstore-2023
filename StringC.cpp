@@ -89,7 +89,7 @@ double parseFloat(const std::string &res)
         if(res[i]=='.'){flg=1;continue;}
         int digit=res[i]-'0';
         if(flg>=4) return -1;
-        if(flg) {flg++;basis/=10;}
+        if(flg) {flg++;tot+=basis*digit;basis/=10;}
         else tot=tot*10+digit;
     }
     return tot;

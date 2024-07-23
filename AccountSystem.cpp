@@ -8,6 +8,9 @@
 #include"AccountSystem.hpp"
 #include"BookSystem.hpp"
 
+//Logout
+extern void recover();
+
 //About AccountData
 bool operator<(AccountData x,AccountData y){return x.user_id<y.user_id;}
 bool operator==(AccountData x,AccountData y){return x.user_id==y.user_id;}
@@ -56,7 +59,7 @@ void AccountSystem::initAccount()
 void AccountSystem::quit()
 {
     if(H.size()>1) {H.invalidOperation(502);return ;}
-    else exit(0);
+    else {recover();exit(0);}
 }
 void AccountSystem::su()
 {

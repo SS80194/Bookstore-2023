@@ -66,7 +66,7 @@ class ConsolePanel
         else if(type1=="name") ret_value.type=1;
         else if(type1=="author") ret_value.type=2;
         else if(type1=="keyword") ret_value.type=3;
-        else if(type1=="price") ret_value.type==4;
+        else if(type1=="price") ret_value.type=4;
         else return tagInfo(-1);
         if(1<=ret_value.type&&ret_value.type<=3)
         {
@@ -76,7 +76,7 @@ class ConsolePanel
         }
         for(;i<len;i++)
         {
-            if(res[i]=='"'&&res[i]!=len-1) return tagInfo(-1);
+            if(i!=len-1&&res[i]=='"') return tagInfo(-1);
             else if(res[i]!='"') infos+=res[i];
         }
         if(infos.size()>StringC::max_length) return tagInfo(-1);

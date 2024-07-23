@@ -1,11 +1,13 @@
 #include "AccountSystem.hpp"
 #include "BookSystem.hpp"
+#include "LogSystem.hpp"
 #include "ConsolePanel.hpp"
 #include <iostream>
 #include <iomanip>
 
 extern ConsolePanel H;
 extern AccountSystem A;
+extern LogSystem L;
 extern int parseInt(const std::string&);
 extern double parseFloat(const std::string&);
 
@@ -58,11 +60,12 @@ void BookSystem::splitKeyWord(StringC &kwd,std::vector<std::string>&tar)
     std::string temp;tar.clear();
     for(int i=0;i<StringC::max_length;i++)
     {
-        if(kwd[i]=='|'||kwd[i]==0) tar.push_back(temp),tar.clear();
+        if(kwd[i]=='|'||kwd[i]==0) tar.push_back(temp),temp.clear();
         if(kwd[i]==0) break;
         else temp+=kwd[i];
     }
     sort(tar.begin(),tar.end());
+
 }
 BookSystem::BookInfo BookSystem::getBook(const StringC& ISBN)
 {
@@ -76,7 +79,7 @@ void BookSystem::insertSelected()
     name_map.insert(KaData<BookInfo>(selected.bookname,selected));
     author_map.insert(KaData<BookInfo>(selected.author,selected));
     std::vector<std::string> kwdlist;
-    splitKeyWord(selected.ISBN,kwdlist);
+    splitKeyWord(selected.keywords,kwdlist);
     for(auto kwd:kwdlist)
         kwd_map.insert(KaData<BookInfo>(kwd,selected));
 }
@@ -86,7 +89,7 @@ void BookSystem::eraseSelected()
     name_map.erase(KaData<BookInfo>(selected.bookname,selected));
     author_map.erase(KaData<BookInfo>(selected.author,selected));
     std::vector<std::string> kwdlist;
-    splitKeyWord(selected.ISBN,kwdlist);
+    splitKeyWord(selected.keywords,kwdlist);
     for(auto kwd:kwdlist)
         kwd_map.erase(KaData<BookInfo>(kwd,selected));
 }
@@ -100,6 +103,11 @@ void BookSystem::findBook()
         //show all books;Waiting for implementation in KVS
         ISBN_map.findAll(a);
         goto FINDBOOKOUTPUT;
+    }
+    if(H[2]=="finance")
+    {
+        L.
+        return ;
     }
     else if(H.size()!=2) {H.invalidOperation(302);return ;}
     temp_tag=H.parseTag(H[1]);
@@ -135,7 +143,9 @@ void BookSystem::findBook()
             std::cout<<a[i].ISBN.toStr()<<"\t";
             std::cout<<a[i].bookname.toStr()<<"\t";
             std::cout<<a[i].keywords.toStr()<<"\t";
-            std::cout<<a[i].keywords.toStr()<<"\t";
+            std::cout<<std::fixed<<std::setprecision(2)<<a[i].price<<"\t";
+            std::cout<<a[i].quantity;
+            std::cout<<std::endl;
         }
     }
 }
@@ -179,6 +189,7 @@ void BookSystem::modifyBook()
     for(int i=1;i<H.size();i++)
     {
         tagInfo temp_tag=H.parseTag(H[i]);
+        if(temp_tag.type==-1) return H.invalidOperation(410);
         if(!Q[temp_tag.type].empty()) return H.invalidOperation(411);
         Q[temp_tag.type]=temp_tag.word;
     }
@@ -208,6 +219,7 @@ void BookSystem::modifyBook()
         std::vector<std::string> kwd_tmp;
         StringC temp(Q[3]);
         splitKeyWord(temp,kwd_tmp);
+
         for(int i=1;i<kwd_tmp.size();i++)
             if(kwd_tmp[i]==kwd_tmp[i-1]) return H.invalidOperation(532);
         mdfed_book.keywords=Q[3];
