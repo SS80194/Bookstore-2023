@@ -3,6 +3,7 @@
 
 #include<cstring>
 #include<string>
+#include<vector>
 
 typedef unsigned long long ull;
 class StringC
@@ -18,12 +19,13 @@ class StringC
     StringC(std::string);
     ull toHash();
     std::string toStr();
-    char& operator[](int k){return (k<max_length?s[k]:s[max_length]);}
-    int strlen();
+    char& operator[](int k) {return (k<max_length?s[k]:s[max_length]);}
+    int strlen() const;
     bool validSetA();
     friend bool operator<(StringC,StringC);
     friend bool operator==(StringC,StringC);
     friend bool operator!=(StringC a,StringC b){return !(a==b);}
+    friend void splitKeyword(const StringC&,std::vector<std::string>&);
     //friend int parseInt(const StringC&);
 };
 

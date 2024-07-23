@@ -22,9 +22,47 @@ void BookSystem::updTop()
     s.pop();
     s.push(selected);
 }
-void splitKeyword(const StringC &kwd,std::vector<std::string>tar)
+bool BookSystem::validISBN(const std::string &s)
 {
-    //Waiting to Implement
+    if(s.size()>20) return false;
+    return true;
+}
+bool BookSystem::validBookname(const std::string&s)
+{
+    if(s.size()>60) return false;
+    for(int i=0;i<s.size();i++)
+        if(s[i]=='"') return false;
+    return true;
+}
+bool BookSystem::validAuthor(const std::string &s)
+{
+    if(s.size()>60) return false;
+    for(int i=0;i<s.size();i++)
+        if(s[i]=='"') return false;
+    return true;
+}
+bool BookSystem::validKeyWord(const std::string&s)
+{
+    if(s.size()>60) return false;
+    for(int i=0;i<s.size();i++)
+    {
+        if(s[i]=='"') return false;
+        if(i>0&&s[i]=='|'&&s[i-1]=='|') return false;
+    }
+    if(s[s.size()-1]=='|') return false;
+    return true;    
+}
+void BookSystem::splitKeyWord(StringC &kwd,std::vector<std::string>&tar)
+{
+    //按 | 分割
+    std::string temp;tar.clear();
+    for(int i=0;i<StringC::max_length;i++)
+    {
+        if(kwd[i]=='|'||kwd[i]==0) tar.push_back(temp),tar.clear();
+        if(kwd[i]==0) break;
+        else temp+=kwd[i];
+    }
+    sort(tar.begin(),tar.end());
 }
 BookSystem::BookInfo BookSystem::getBook(const StringC& ISBN)
 {
@@ -60,7 +98,7 @@ void BookSystem::findBook()
     if(H.size()==1)
     {
         //show all books;Waiting for implementation in KVS
-        //Maybe not KVS because it may contain lots of books
+        ISBN_map.findAll(a);
         goto FINDBOOKOUTPUT;
     }
     else if(H.size()!=2) {H.invalidOperation(302);return ;}
@@ -125,9 +163,9 @@ void BookSystem::buyBook()
 
 void BookSystem::selectBook()
 {
-    if(!A.privilegeEnable(3)) H.invalidOperation(701);
-    if(H.size()!=2) H.invalidOperation(702);
-    if(!validISBN(H[1])) H.invalidOperation(703);
+    if(!A.privilegeEnable(3)) {H.invalidOperation(701);return ;}
+    if(H.size()!=2) {H.invalidOperation(702);return ;}
+    if(!validISBN(H[1])) return H.invalidOperation(703);
     selected=(StringC)H[1];
     if(!ISBN_map.exist(H[1])) insertSelected();
     else selected=getBook(H[1]);
@@ -135,15 +173,68 @@ void BookSystem::selectBook()
 
 void BookSystem::modifyBook()
 {
-    //Waiting For Implementation.
+    if(!A.privilegeEnable(3)) return H.invalidOperation(401);
+    if(H.size()<2) return H.invalidOperation(402);
+    std::vector<std::string>Q;Q.resize(5);
+    for(int i=1;i<H.size();i++)
+    {
+        tagInfo temp_tag=H.parseTag(H[i]);
+        if(!Q[temp_tag.type].empty()) return H.invalidOperation(411);
+        Q[temp_tag.type]=temp_tag.word;
+    }
+    //From 1 to 4 Modify!
+    if(selected.ISBN.toStr().empty()) return H.invalidOperation(420);
+    //不存在选中的图书
+    BookInfo mdfed_book=selected;
+    if(!Q[0].empty())//Not Empty ISBN
+    {
+        if(!validISBN(Q[0])) return H.invalidOperation(501);
+        if(ISBN_map.exist(Q[0])) return H.invalidOperation(502);
+        mdfed_book.ISBN=Q[0];
+    }
+    if(!Q[1].empty())//Not Empty BookName
+    {
+        if(!validBookname(Q[1])) return H.invalidOperation(511);
+        mdfed_book.bookname=Q[1];
+    }
+    if(!Q[2].empty())//Not Empty Author
+    {
+        if(!validAuthor(Q[2])) return H.invalidOperation(521);
+        mdfed_book.author=Q[2];
+    }
+    if(!Q[3].empty())//Not Empty Keyword
+    {
+        if(!validKeyWord(Q[3])) return H.invalidOperation(531);
+        std::vector<std::string> kwd_tmp;
+        StringC temp(Q[3]);
+        splitKeyWord(temp,kwd_tmp);
+        for(int i=1;i<kwd_tmp.size();i++)
+            if(kwd_tmp[i]==kwd_tmp[i-1]) return H.invalidOperation(532);
+        mdfed_book.keywords=Q[3];
+    }
+    if(!Q[4].empty())//Not Empty Price
+    {
+        double target_price=parseFloat(Q[4]);
+        if(target_price<0) return H.invalidOperation(541);
+        mdfed_book.price=target_price;
+    }
+    eraseSelected();
+    selected=mdfed_book;
+    insertSelected();
 }
 
 void BookSystem::importBook()
 {
-    if(!A.privilegeEnable(3)) H.invalidOperation(901);
-    if(H.size()!=3) H.invalidOperation(902);
+    if(!A.privilegeEnable(3)) return H.invalidOperation(901);
+    if(H.size()!=3) return H.invalidOperation(902);
     int p_quant=parseInt(H[1]);double p_totalcost=parseInt(H[2]);
-    if(!parseInt(H[1])) H.invalidOperation(903);
-    if(!parseFloat(H[2])) H.invalidOperation(904);
-    //看不懂这要干什么。那就先不写。
+    if(!parseInt(H[1])) return H.invalidOperation(903);
+    if(!parseFloat(H[2])) return H.invalidOperation(904);
+    //可能，这里的逻辑有一些问题。
+    BookInfo mdfed_book=selected;
+    eraseSelected();
+    mdfed_book.totalcost+=parseFloat(H[2]);
+    mdfed_book.quantity+=parseInt(H[1]);
+    selected=mdfed_book;
+    insertSelected();
 }

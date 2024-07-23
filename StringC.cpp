@@ -41,7 +41,7 @@ bool operator==(StringC a,StringC b)
     }
     return true;
 }
-int StringC::strlen()
+int StringC::strlen() const
 {
     for(int i=0;i<=max_length;i++)
         if(!s[i]) return i;
@@ -81,5 +81,16 @@ int parseInt(const std::string &res)
 
 double parseFloat(const std::string &res)
 {
-    double tot=0;
+    double tot=0;int flg=0;double basis=0.1;
+    for(int i=0;i<res.size();i++)
+    {
+        if(res[i]==0) break;
+        if((res[i]<'0'||res[i]>'9')&&res[i]!='.')  return -1;
+        if(res[i]=='.'){flg=1;continue;}
+        int digit=res[i]-'0';
+        if(flg>=4) return -1;
+        if(flg) {flg++;basis/=10;}
+        else tot=tot*10+digit;
+    }
+    return tot;
 }

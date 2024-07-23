@@ -193,6 +193,7 @@ template<typename TTA>class KVS
     void eraseNode(int );
     void insert(KaData<TTA>);
     void find(std::vector<TTA>&,StringC index);
+    void findAll(std::vector<TTA>&);
     bool exist(StringC index);
     bool erase(KaData<TTA>);
     bool erase(StringC);
@@ -388,5 +389,16 @@ template<typename TTA>bool KVS<TTA>::exist(StringC index)
     }
     return false;
 }
-
+template<typename TTA>void KVS<TTA>::findAll(std::vector<TTA>&a)
+{
+    int target_node_i=0;
+    BasicInfos<TTA> &cur=content;
+    for(int i=1;i<=cur.n;i++)
+    {    
+        target_node_i=cur.pos[i];
+        ListNode<TTA> opt_node;file_detailed.read(opt_node,target_node_i);
+        for(int i=0;i<opt_node.n;i++)
+            a.push_back(opt_node.val[i].value);
+    }
+}
 #endif

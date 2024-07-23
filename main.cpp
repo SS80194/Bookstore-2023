@@ -4,11 +4,18 @@
 extern void InitHome();
 extern void ServeHome();
 
+void recover()
+{
+    system("rm Account.mr");
+}
+
 int main()
 {
-    freopen("testcase3.in","r",stdin);
+    freopen("testcase4.in","r",stdin);
     //std::string s;std::cin>>s;std::cout<<s<<std::endl;
     //printf("shangdaole\n");
     InitHome();
     ServeHome();
+    printf("wds");
+    recover();
 }

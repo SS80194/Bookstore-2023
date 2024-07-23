@@ -87,7 +87,7 @@ void AccountSystem::logout()
     if(H.size()>1) {H.invalidOperation();return ;}
     //std::cout<<"L:"<<s.top().user_id.toStr()<<" "<<mp[s.top().user_id]<<std::endl;
     if(s.empty()) {H.invalidOperation();return ;}
-    else mp[s.top().user_id]--,s.pop();
+    else {mp[s.top().user_id]--,s.pop();B.popStack();}
 }
 void AccountSystem::signup()
 {
