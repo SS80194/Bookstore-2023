@@ -14,10 +14,12 @@ extern double parseFloat(const std::string&);
 void BookSystem::pushStack()
 {
     s.push(BookInfo());
+    selected=BookInfo();
 }
 void BookSystem::popStack()
 {
     s.pop();
+    selected=s.empty()?BookInfo():s.top();
 }
 void BookSystem::updTop()
 {
@@ -180,6 +182,7 @@ void BookSystem::selectBook()
     selected=(StringC)H[1];
     if(!ISBN_map.exist(H[1])) insertSelected();
     else selected=getBook(H[1]);
+    updTop();
 }
 
 void BookSystem::modifyBook()
@@ -234,11 +237,13 @@ void BookSystem::modifyBook()
     eraseSelected();
     selected=mdfed_book;
     insertSelected();
+    updTop();
 }
 
 void BookSystem::importBook()
 {
     if(!A.privilegeEnable(3)) return H.invalidOperation(901);
+    if(selected.ISBN.toStr().empty()) return H.invalidOperation(913);
     if(H.size()!=3) return H.invalidOperation(902);
     int p_quant=parseInt(H[1]);double p_totalcost=parseInt(H[2]);
     if(!parseInt(H[1])) return H.invalidOperation(903);
@@ -251,4 +256,5 @@ void BookSystem::importBook()
     mdfed_book.quantity+=parseInt(H[1]);
     selected=mdfed_book;
     insertSelected();
+    updTop();
 }
