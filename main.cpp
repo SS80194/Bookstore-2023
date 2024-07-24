@@ -8,11 +8,11 @@ extern void ServeHome();
 
 int main()
 {
-    freopen("testcase4.in","r",stdin);
+    freopen("testcase6.in","r",stdin);
     //std::string s;std::cin>>s;std::cout<<s<<std::endl;
-    //printf("shangdaole\n");
+    printf("shangdaole\n");
     InitHome();
     ServeHome();
-    printf("wds");
+    //printf("wds");
     //recover();
 }

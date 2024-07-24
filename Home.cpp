@@ -7,11 +7,12 @@
 #include"ConsolePanel.hpp"
 #include"AccountSystem.hpp"
 #include"BookSystem.hpp"
+#include "LogSystem.hpp"
 
 ConsolePanel H;
 AccountSystem A;
 BookSystem B;
-//LogSystem L;
+LogSystem L;
 
 std::map<std::string,void (AccountSystem::*)()> map_A;
 std::map<std::string,void (BookSystem::*)()> map_B;
@@ -25,6 +26,7 @@ void recover()
     system("rm ISBN_order.mr");
     system("rm name_order.mr");
     system("rm kwd_order.mr");
+    system("rm finance_log.mr");
 }
 
 void InitHome()

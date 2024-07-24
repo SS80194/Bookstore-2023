@@ -104,9 +104,9 @@ void BookSystem::findBook()
         ISBN_map.findAll(a);
         goto FINDBOOKOUTPUT;
     }
-    if(H[2]=="finance")
+    if(H[1]=="finance")
     {
-        L.
+        L.showFinance();
         return ;
     }
     else if(H.size()!=2) {H.invalidOperation(302);return ;}
@@ -167,6 +167,7 @@ void BookSystem::buyBook()
         selected.quantity-=purchase_quantity;
         insertSelected();
         std::cout<<std::fixed<<std::setprecision(2)<<selected.price*purchase_quantity<<std::endl;
+        L.AddIncome(selected.price*purchase_quantity);
         selected=selected_origin;
     }
 }
@@ -246,6 +247,7 @@ void BookSystem::importBook()
     BookInfo mdfed_book=selected;
     eraseSelected();
     mdfed_book.totalcost+=parseFloat(H[2]);
+    L.AddCost(parseFloat(H[2]));
     mdfed_book.quantity+=parseInt(H[1]);
     selected=mdfed_book;
     insertSelected();
