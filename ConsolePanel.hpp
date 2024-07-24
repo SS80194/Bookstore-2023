@@ -41,8 +41,8 @@ class ConsolePanel
     bool safetyCheck(){for(std::string &x:s) if(x.size()>StringC::max_length) return false;return true;}
     void invalidOperation(int typ=0)
     {
-        if(typ) printf("Invalid Error code=%d\n",typ);else printf("Invalid\n");
-        //printf("Invalid\n");
+        //if(typ) printf("Invalid Error code=%d\n",typ);else printf("Invalid\n");
+        printf("Invalid\n");
         //std::cout<<s_ori<<std::endl;
         fflush(stdout);return ;
     }

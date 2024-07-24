@@ -20,6 +20,7 @@ std::map<std::string,void (BookSystem::*)()> map_B;
 void recover()
 {
     //printf("Renoot");
+    /*
     system("pwd");
     system("rm Account.mr");
     system("rm author_order.mr");
@@ -27,6 +28,7 @@ void recover()
     system("rm name_order.mr");
     system("rm kwd_order.mr");
     system("rm finance_log.mr");
+    */
 }
 
 void InitHome()
