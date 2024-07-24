@@ -144,6 +144,7 @@ void BookSystem::findBook()
         {
             std::cout<<a[i].ISBN.toStr()<<"\t";
             std::cout<<a[i].bookname.toStr()<<"\t";
+            std::cout<<a[i].author.toStr()<<"\t";
             std::cout<<a[i].keywords.toStr()<<"\t";
             std::cout<<std::fixed<<std::setprecision(2)<<a[i].price<<"\t";
             std::cout<<a[i].quantity;
