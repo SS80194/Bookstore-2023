@@ -158,7 +158,7 @@ void BookSystem::buyBook()
     if(H.size()!=3) {H.invalidOperation(802);return ;}
     if(!validISBN(H[1])) {H.invalidOperation(803);return ;}
     int purchase_quantity=parseInt(H[2]);
-    if(purchase_quantity==-1) {H.invalidOperation(804);return ;}
+    if(purchase_quantity==-1||purchase_quantity==0) {H.invalidOperation(804);return ;}
     BookInfo selected_origin=selected;
     selected=getBook(H[1]);
     if(selected.quantity<purchase_quantity)
@@ -246,8 +246,8 @@ void BookSystem::importBook()
     if(selected.ISBN.toStr().empty()) return H.invalidOperation(913);
     if(H.size()!=3) return H.invalidOperation(902);
     int p_quant=parseInt(H[1]);double p_totalcost=parseInt(H[2]);
-    if(!parseInt(H[1])) return H.invalidOperation(903);
-    if(!parseFloat(H[2])) return H.invalidOperation(904);
+    if(parseInt(H[1])<=0) return H.invalidOperation(903);
+    if(parseFloat(H[2])<=0) return H.invalidOperation(904);
     //可能，这里的逻辑有一些问题。
     BookInfo mdfed_book=selected;
     eraseSelected();
