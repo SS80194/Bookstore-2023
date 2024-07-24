@@ -64,7 +64,7 @@ void BookSystem::splitKeyWord(StringC &kwd,std::vector<std::string>&tar)
     {
         if(kwd[i]=='|'||kwd[i]==0) tar.push_back(temp),temp.clear();
         if(kwd[i]==0) break;
-        else temp+=kwd[i];
+        else if(kwd[i]!='|') temp+=kwd[i];
     }
     sort(tar.begin(),tar.end());
 
@@ -72,7 +72,7 @@ void BookSystem::splitKeyWord(StringC &kwd,std::vector<std::string>&tar)
 BookSystem::BookInfo BookSystem::getBook(const StringC& ISBN)
 {
     std::vector<BookInfo> g;
-    ISBN_map.find(g,H[1]);
+    ISBN_map.find(g,ISBN);
     return g[0];
 }
 void BookSystem::insertSelected()
@@ -132,11 +132,16 @@ void BookSystem::findBook()
     else if(temp_tag.type==3)
     {
         if(!validKeyWord(temp_tag.word)) H.invalidOperation(333);
-        kwd_map.find(a,temp_tag.word);
+        std::vector<std::string> kwdlist;
+        StringC temp_kwds=temp_tag.word;
+        splitKeyWord(temp_kwds,kwdlist);
+        for(auto kwd:kwdlist) kwd_map.find(a,kwd);
+
     }
     else if(temp_tag.type==4) {H.invalidOperation(343);return ;}
     FINDBOOKOUTPUT:
     std::sort(a.begin(),a.end());
+    a.erase(std::unique(a.begin(), a.end()), a.end());
     if(a.empty()){std::cout<<std::endl;}
     else
     {
@@ -160,10 +165,11 @@ void BookSystem::buyBook()
     if(!validISBN(H[1])) {H.invalidOperation(803);return ;}
     int purchase_quantity=parseInt(H[2]);
     if(purchase_quantity==-1||purchase_quantity==0) {H.invalidOperation(804);return ;}
+    if(!ISBN_map.exist(StringC(H[1]))) return H.invalidOperation(870);
     BookInfo selected_origin=selected;
     selected=getBook(H[1]);
     if(selected.quantity<purchase_quantity)
-        {selected=selected_origin;H.invalidOperation(805);return ;}
+        {selected=selected_origin;return H.invalidOperation(805);}
     else
     {
         eraseSelected();

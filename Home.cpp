@@ -21,7 +21,6 @@ void recover()
 {
     //printf("Renoot");
     /*
-    system("pwd");
     system("rm Account.mr");
     system("rm author_order.mr");
     system("rm ISBN_order.mr");
