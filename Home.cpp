@@ -62,7 +62,6 @@ void ServeHome()
         if(H.s_ori=="") {exit(0);recover();}
         //std::cout<<"T:"<<H.s_ori<<std::endl;
         if(!H.size()) H.invalidOperation();
-        else if(!H.safetyCheck()) H.invalidOperation();
         else if(map_A.find(H.type())!=map_A.end())
             (A.*map_A[H.type()])();
         else if(map_B.find(H.type())!=map_B.end())
