@@ -8,7 +8,7 @@ extern void ServeHome();
 
 int main()
 {
-    //freopen("2.in","r",stdin);
+    //freopen("testcase2.in","r",stdin);
     //freopen("fick.out","w",stdout);
     //std::string s;std::cin>>s;std::cout<<s<<std::endl;
     //printf("shangdaole\n");

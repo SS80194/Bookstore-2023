@@ -27,6 +27,7 @@ void recover()
     system("rm name_order.mr");
     system("rm kwd_order.mr");
     system("rm finance_log.mr");
+    system("rm id_order.mr");
     */
 }
 

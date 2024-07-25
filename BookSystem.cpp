@@ -19,7 +19,22 @@ void BookSystem::pushStack()
 void BookSystem::popStack()
 {
     s.pop();
-    selected=s.empty()?BookInfo():s.top();
+    //selected=s.empty()?BookInfo():s.top();
+    if(s.empty()) selected=BookInfo();
+    else
+    {
+        selected=s.top();
+        std::string selected_id=std::to_string(selected.id);
+        std::vector<StringC>a_temp;
+        StringC ISBN_new;id_map.find(a_temp,selected_id);
+        if(!a_temp.size()) selected=BookInfo();
+        else
+        {
+            ISBN_new=a_temp[0];
+            selected=getBook(ISBN_new);
+        }
+        
+    }
 }
 void BookSystem::updTop()
 {
@@ -80,6 +95,7 @@ void BookSystem::insertSelected()
     ISBN_map.insert(KaData<BookInfo>(selected.ISBN,selected));
     name_map.insert(KaData<BookInfo>(selected.bookname,selected));
     author_map.insert(KaData<BookInfo>(selected.author,selected));
+    id_map.insert(KaData<StringC>(std::to_string(selected.id),selected.ISBN));
     std::vector<std::string> kwdlist;
     splitKeyWord(selected.keywords,kwdlist);
     for(auto kwd:kwdlist)
@@ -90,6 +106,7 @@ void BookSystem::eraseSelected()
     ISBN_map.erase(KaData<BookInfo>(selected.ISBN,selected));
     name_map.erase(KaData<BookInfo>(selected.bookname,selected));
     author_map.erase(KaData<BookInfo>(selected.author,selected));
+    id_map.erase(KaData<StringC>(std::to_string(selected.id),selected.ISBN));
     std::vector<std::string> kwdlist;
     splitKeyWord(selected.keywords,kwdlist);
     for(auto kwd:kwdlist)
@@ -187,7 +204,15 @@ void BookSystem::selectBook()
     if(H.size()!=2) {H.invalidOperation(702);return ;}
     if(!validISBN(H[1])) return H.invalidOperation(703);
     selected=(StringC)H[1];
-    if(!ISBN_map.exist(H[1])) insertSelected();
+    if(!ISBN_map.exist(H[1]))//Not Exist this ISBN.
+    {
+        //Create A new Book.
+        int current_tot=id_map.info();
+        current_tot++;
+        id_map.setInfo(current_tot);
+        selected.id=current_tot;
+        insertSelected();
+    }
     else selected=getBook(H[1]);
     updTop();
 }

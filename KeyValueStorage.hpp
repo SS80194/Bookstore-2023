@@ -184,6 +184,8 @@ template<typename TTA>class KVS
         else syncBasisFile();
     }
     
+    int info();
+    void setInfo(int );
     int begin_pos();
     void setBegin_pos(int );//请使用setBegin_pos方法来设置begin_pos
     bool empty();
@@ -198,6 +200,16 @@ template<typename TTA>class KVS
     bool erase(KaData<TTA>);
     bool erase(StringC);
 };
+
+template<typename TTA>int KVS<TTA>::info()
+{
+    int x;file_detailed.get_info(x,2);
+    return x;
+}
+template<typename TTA>void KVS<TTA>::setInfo(int x)
+{
+    file_detailed.write_info(x,2);
+}
 
 template<typename TTA>int KVS<TTA>::begin_pos()
 {

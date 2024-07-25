@@ -16,9 +16,10 @@ class BookSystem
         StringC ISBN,bookname,author,keywords;
         int quantity;
         double price,totalcost;
+        int id;
         public:
-        BookInfo():quantity(0),price(0),totalcost(0){};
-        BookInfo(StringC ISBN_res):ISBN(ISBN_res),quantity(0),totalcost(0){};
+        BookInfo():quantity(0),price(0),totalcost(0),id(0){};
+        BookInfo(StringC ISBN_res):ISBN(ISBN_res),quantity(0),totalcost(0),id(0){};
         BookInfo(const BookInfo &res){(*this)=res;};
         BookInfo(const StringC &ISBN_res,const StringC &name_res,const StringC &author_res,const StringC &keywords_res,int quantity_res,double price_res,double totalcost_res)
         :ISBN(ISBN_res),bookname(name_res),author(author_res),keywords(keywords_res),quantity(quantity_res),price(price_res),totalcost(totalcost_res){};
@@ -31,6 +32,7 @@ class BookSystem
     KVS<BookInfo>name_map{"name_order.mr"};
     KVS<BookInfo>author_map{"author_order.mr"};
     KVS<BookInfo>kwd_map{"kwd_order.mr"};
+    KVS<StringC>id_map{"id_order.mr"};
     std::stack<BookInfo> s;
     public:
     bool validISBN(const std::string&);
